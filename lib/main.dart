@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/navigasi_utama.dart';
 import 'package:islami_app/pages/welcome_page.dart';
 import 'core/theme_notifier.dart'; 
 import 'core/tema/tema_aplikasi.dart';
@@ -49,7 +50,7 @@ class MyIslamicApp extends StatelessWidget {
           ),
           
           themeMode: currentMode,
-          home: const WelcomePage(), // Tanpa const
+          home: const NavigasiUtama(), // Tanpa const
           
         );
       },

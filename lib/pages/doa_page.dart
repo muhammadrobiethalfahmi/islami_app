@@ -13,13 +13,7 @@ class DoaPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Jakarta, Indonesia', style: TextStyle(color: Color(0xFF006D44), fontSize: 18, fontWeight: FontWeight.bold)),
-                  Icon(Icons.location_on_outlined, color: Color(0xFF006D44)),
-                ],
-              ),
+            
               const SizedBox(height: 20),
               const Text('Doa Harian', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
