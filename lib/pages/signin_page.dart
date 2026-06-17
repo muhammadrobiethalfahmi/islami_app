@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // 1. Tambahkan import Firebase Auth
+import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import '../../core/constants/warna.dart';
 import 'package:islami_app/navigasi_utama.dart';
 
@@ -27,11 +28,24 @@ class _SignInPageState extends State<SignInPage> {
     setState(() => _isLoading = true); // Nyalakan loading
 
     try {
-      // 4. Proses autentikasi ke Firebase
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      // 4. Proses autentikasi ke Firebase (Diubah sedikit untuk menangkap data user)
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      // 👈 TAMBAHAN 2: Mengambil data user yang sukses login & menyimpannya ke Firestore
+      User? user = userCredential.user;
+      if (user != null) {
+        // Kita ambil nama dari email (contoh: budi@gmail.com menjadi budi)
+        String namaOtomatis = user.displayName ?? _emailController.text.split('@')[0];
+        
+        await saveUserData(
+          user.uid,
+          namaOtomatis,
+          user.email ?? _emailController.text.trim(),
+        );
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -131,5 +145,13 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+  //TAMBAHAN 3: Fungsi save user 
+  Future<void> saveUserData(String userId, String userName, String userEmail) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      'name': userName,
+      'email': userEmail,
+      'createdAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }

@@ -50,7 +50,7 @@ class MyIslamicApp extends StatelessWidget {
           ),
           
           themeMode: currentMode,
-          home: const NavigasiUtama(), // Tanpa const
+          home: const WelcomePage(), // Tanpa const
           
         );
       },

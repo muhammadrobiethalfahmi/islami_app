@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // 1. Tambahkan import Firebase Auth
+import 'package:cloud_firestore/cloud_firestore.dart'; // 👈 TAMBAHAN 1: Import Cloud Firestore
 import '../../core/constants/warna.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -35,6 +36,16 @@ class _SignUpPageState extends State<SignUpPage> {
 
       // (Opsional) Simpan Nama Lengkap pengguna ke dalam profil Firebase mereka
       await userCredential.user?.updateDisplayName(_nameController.text.trim());
+
+      // 👈 TAMBAHAN 2: Daftarkan data user baru ke Firestore database agar teks tidak miring lagi
+      User? user = userCredential.user;
+      if (user != null) {
+        await saveUserData(
+          user.uid,
+          _nameController.text.trim(),
+          _emailController.text.trim(),
+        );
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -119,7 +130,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 40),
               
-              // 6. Tampilkan animasi loading jika sedang memproses data daftar
+              //  animasi loading 
               _isLoading
                 ? const Center(child: CircularProgressIndicator(color: WarnaAplikasi.biruMuted))
                 : ElevatedButton(
@@ -138,5 +149,14 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  //  Fungsi save user
+  Future<void> saveUserData(String userId, String userName, String userEmail) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      'name': userName,
+      'email': userEmail,
+      'createdAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }
