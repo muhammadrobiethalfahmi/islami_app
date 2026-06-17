@@ -8,6 +8,7 @@ import '../pages/jadwal_page.dart';
 import '../pages/kiblat_page.dart';
 import '../services/prayer_service.dart';
 import '../services/city_service.dart'; 
+import "../pages/profile_page.dart";
 
 class BerandaPage extends StatefulWidget {
   const BerandaPage({super.key});
@@ -109,7 +110,7 @@ class _BerandaPageState extends State<BerandaPage> {
     return "$hours:$minutes:$seconds";
   }
 
-  // Mengambil format tanggal Indonesia: Hari, DD/MM/YYYY
+  // Mengubah format tanggal Indonesia: Hari, DD/MM/YYYY
   String _getFormattedDate(DateTime now) {
     final days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
     final dayName = days[now.weekday - 1];
@@ -165,6 +166,29 @@ class _BerandaPageState extends State<BerandaPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
+                  // 👈 2. TOMBOL PROFIL DI POJOK KANAN ATAS BERANDA
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ProfilePage()),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(50),
+                      child: const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.account_circle_outlined,
+                          size: 30,
+                          color: WarnaAplikasi.hijauSage,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12), // Jarak aman ke Card Utama
                   
                   // StreamBuilder disematkan di sini untuk mengontrol pembaruan real-time konten Header Card
                   StreamBuilder<DateTime>(

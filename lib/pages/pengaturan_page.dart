@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/theme_notifier.dart'; 
 import '../services/notification_service.dart'; // Import service notifikasi kita
+import 'profile_page.dart'; // 👈 Tambahkan import halaman profile ke sini
 
 class PengaturanPage extends StatefulWidget {
   const PengaturanPage({super.key});
@@ -119,6 +120,30 @@ class _PengaturanPageState extends State<PengaturanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 🔴 DI SINI MENU BARU PROFIL YANG DITAMBAHKAN 🔴
+                    _buildSectionTitle('AKUN', colorScheme),
+                    _buildGroupCard(
+                      context,
+                      [
+                        _buildSettingTile(
+                          context: context,
+                          icon: Icons.person_outline_rounded,
+                          title: 'Profil Pengguna',
+                          subtitle: 'Lihat nama, email, dan keluar akun',
+                          showChevron: true,
+                          onTap: () {
+                            // Navigasi masuk ke halaman ProfilePage
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ProfilePage()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    
+                    // KODE ASLI ABANG KE BAWAH TIDAK ADA YANG DIUBAH 👍
                     _buildSectionTitle('TAMPILAN', colorScheme),
                     _buildGroupCard(
                       context,
@@ -178,11 +203,9 @@ class _PengaturanPageState extends State<PengaturanPage> {
                           context: context,
                           icon: Icons.volume_up_outlined,
                           title: 'Nada Dering Adzan',
-                          // Teks kanan berubah otomatis mengikuti pilihan user
                           trailingText: _selectedAdzan == 'adzan_makka' ? 'Mekkah' : 'Madinah',
                           showChevron: !_isSilentMode,
                           isDisabled: _isSilentMode,
-                          // Jika mode hening tidak aktif, maka ubin ini bisa diklik
                           onTap: _isSilentMode ? null : () => _showAdzanSelectionModal(context),
                         ),
                         _buildDivider(context),
@@ -211,7 +234,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
                         label: const Text('Test Suara Adzan Terpilih'),
                         onPressed: () {
                           NotificationService.tampilkanAdzan(
-                            namaFileAdzan: _selectedAdzan, // Otomatis mengirim file terpilh (makka/madinah)
+                            namaFileAdzan: _selectedAdzan, 
                             isSilentMode: _isSilentMode,
                             isAdzanReminder: _isAdzanReminder,
                           );
@@ -260,7 +283,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
     Widget? trailingWidget,
     bool showChevron = false,
     bool isDisabled = false, 
-    VoidCallback? onTap, // Parameter baru untuk menangkap aksi klik
+    VoidCallback? onTap, 
   }) {
     final theme = Theme.of(context);
     final double opacity = isDisabled ? 0.35 : 1.0;
@@ -268,7 +291,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
     return Opacity(
       opacity: opacity,
       child: InkWell(
-        onTap: isDisabled ? null : onTap, // Mengunci klik jika ubin dalam posisi disabled
+        onTap: isDisabled ? null : onTap, 
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
